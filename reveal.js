@@ -44,8 +44,16 @@
   }
   if(shown)renderResult();
  }
- const releaseAt=Date.parse(c.revealDate||''),releasedNow=q.get('preview')==='1'||(Number.isFinite(releaseAt)&&Date.now()>=releaseAt);
- $('passwordForm').hidden=!releasedNow;$('gateCopy').hidden=!releasedNow;$('notYetMessage').hidden=releasedNow;
+ const isPreview=q.get('preview')==='1';
+ const releaseAt=Date.parse(c.revealDate||'');
+ function releaseIsOpen(){return isPreview||(Number.isFinite(releaseAt)&&Date.now()>=releaseAt)}
+ function syncReleaseState(){
+  const releasedNow=releaseIsOpen();
+  $('passwordForm').hidden=!releasedNow;$('gateCopy').hidden=!releasedNow;$('notYetMessage').hidden=releasedNow;
+  if(!releasedNow&&shown){shown=false;$('result').hidden=true;$('gate').hidden=false;$('password').value='';error.textContent=''}
+  if(releasedNow&&shown){$('gate').hidden=true;$('result').hidden=false}
+ }
+ syncReleaseState();
  function show(){
   shown=true;$('gate').hidden=true;$('result').hidden=false;activePhotos=(c.photos||[]).filter(item=>item.src);currentPhoto=0;
   if(activePhotos.length){$('slideshow').hidden=false;$('slidePrev').addEventListener('click',()=>{currentPhoto=(currentPhoto-1+activePhotos.length)%activePhotos.length;renderPhoto()});$('slideNext').addEventListener('click',()=>{currentPhoto=(currentPhoto+1)%activePhotos.length;renderPhoto()})}
@@ -53,7 +61,8 @@
   const conf=$('confetti');for(let i=0;i<72;i++){const p=document.createElement('i');p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*1.4+'s';p.style.animationDuration=2.7+Math.random()*2+'s';p.style.setProperty('--drift',Math.random()*180-90+'px');conf.append(p)}
   const fireworks=$('fireworks'),palette=c.babySex==='girl'?['#f3a4c3','#ffe0a1','#fff4f7']:['#8bd4ef','#ffe0a1','#e8f7ff'];[{x:22,y:28,d:0},{x:76,y:24,d:.55},{x:52,y:40,d:1.05}].forEach((spot,index)=>{const burst=document.createElement('div');burst.className='firework';burst.style.left=spot.x+'%';burst.style.top=spot.y+'%';for(let i=0;i<20;i++){const spark=document.createElement('i'),angle=Math.PI*2*i/20,distance=75+Math.random()*75;spark.style.setProperty('--x',Math.cos(angle)*distance+'px');spark.style.setProperty('--y',Math.sin(angle)*distance+'px');spark.style.setProperty('--spark',palette[(i+index)%palette.length]);spark.style.animationDelay=(spot.d+Math.random()*.2)+'s';burst.append(spark)}fireworks.append(burst)});
  }
- form.addEventListener('submit',e=>{e.preventDefault();if($('password').value!==String(c.revealPassword||'America')){error.textContent=words().wrongPassword||'비밀번호가 맞지 않아요. 다시 확인해 주세요.';return}error.textContent='';show()});
+ form.addEventListener('submit',e=>{e.preventDefault();syncReleaseState();if(!releaseIsOpen()){error.textContent=words().notYetMessage||'아직 확인 시간이 되지 않았어요.';return}if($('password').value!==String(c.revealPassword||'America')){error.textContent=words().wrongPassword||'비밀번호가 맞지 않아요. 다시 확인해 주세요.';return}error.textContent='';show()});
+ if(!isPreview){setInterval(syncReleaseState,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncReleaseState()})}
  const toggle=$('languageToggle');if(toggle)toggle.addEventListener('click',()=>applyLanguage(language==='ko'?'en':'ko'));
  applyLanguage(language);
 })();
