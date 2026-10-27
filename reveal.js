@@ -63,7 +63,7 @@
   const fireworks=$('fireworks'),palette=c.babySex==='girl'?['#f3a4c3','#ffe0a1','#fff4f7']:['#8bd4ef','#ffe0a1','#e8f7ff'];[{x:22,y:28,d:0},{x:76,y:24,d:.55},{x:52,y:40,d:1.05}].forEach((spot,index)=>{const burst=document.createElement('div');burst.className='firework';burst.style.left=spot.x+'%';burst.style.top=spot.y+'%';for(let i=0;i<20;i++){const spark=document.createElement('i'),angle=Math.PI*2*i/20,distance=75+Math.random()*75;spark.style.setProperty('--x',Math.cos(angle)*distance+'px');spark.style.setProperty('--y',Math.sin(angle)*distance+'px');spark.style.setProperty('--spark',palette[(i+index)%palette.length]);spark.style.animationDelay=(spot.d+Math.random()*.2)+'s';burst.append(spark)}fireworks.append(burst)});
  }
  form.addEventListener('submit',e=>{e.preventDefault();syncReleaseState();if(!releaseIsOpen()){error.textContent=words().notYetMessage||'아직 확인 시간이 되지 않았어요.';return}if($('password').value!==String(c.revealPassword||'America')){error.textContent=words().wrongPassword||'비밀번호가 맞지 않아요. 다시 확인해 주세요.';return}error.textContent='';show()});
- if(!isPreview){setInterval(syncReleaseState,1000);setInterval(refreshConfiguredDate,15000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncReleaseState();refreshConfiguredDate()}})}
+ if(!isPreview){setInterval(syncReleaseState,1000);setInterval(refreshConfiguredDate,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncReleaseState();refreshConfiguredDate()}})}
  const toggle=$('languageToggle');if(toggle)toggle.addEventListener('click',()=>applyLanguage(language==='ko'?'en':'ko'));
  applyLanguage(language);
 })();
