@@ -58,7 +58,7 @@
  function tick(){if(q.get('preview')==='1')return;const configuredDeadline=Date.parse(c.revealDate||'');if(configuredDeadline!==dateDeadline)dateDeadline=configuredDeadline;if(!Number.isFinite(dateDeadline))returnCountdownIfNeeded();else{const left=dateDeadline-Date.now();if(left<=0){openDay();return}if(released)returnCountdownIfNeeded();const s=Math.floor(left/1000);set('days',String(Math.floor(s/86400)).padStart(2,'0'));set('hours',String(Math.floor(s%86400/3600)).padStart(2,'0'));set('minutes',String(Math.floor(s%3600/60)).padStart(2,'0'));set('seconds',String(s%60).padStart(2,'0'))}}
  function returnCountdownIfNeeded(){if(released)returnToCountdown()}
  async function refreshConfiguredDate(){try{const response=await fetch('config.js?v='+Date.now(),{cache:'no-store'});if(!response.ok)return;const source=await response.text(),match=source.match(/revealDate\s*:\s*(['"])(.*?)\1/);if(match){const latest=Date.parse(match[2]);if(Number.isFinite(latest)&&latest!==dateDeadline){dateDeadline=latest;tick()}}}catch{}}
- if(q.get('preview')==='1')openDay();else{tick();setInterval(tick,1000);setInterval(refreshConfiguredDate,15000)}
+ if(q.get('preview')==='1')openDay();else{tick();setInterval(tick,1000);setInterval(refreshConfiguredDate,1000)}
  const toggle=$('languageToggle');if(toggle)toggle.addEventListener('click',()=>applyLanguage(language==='ko'?'en':'ko'));
  applyLanguage(language);
  const bar=$('progressBar');addEventListener('scroll',()=>{if(bar)bar.style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100||0)+'%'},{passive:true});
