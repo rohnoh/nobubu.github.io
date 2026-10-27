@@ -5,7 +5,7 @@
  */
 window.REVEAL_CONFIG={
   family:'inlaws', // 'inlaws' for in-laws, 'parents' for parents; URL can override with ?family=parents
-  revealDate:'2026-10-26T22:37:00-04:00', // 2026-10-31 10:00 KST / 2026-10-30 21:00 Philadelphia
+  revealDate:'2026-10-30T21:00:00-04:00', // 2026-10-31 10:00 KST / 2026-10-30 21:00 Philadelphia
   revealTimeZone:'Asia/Seoul',
   revealPassword:'America',
   zoomUrl:'https://us05web.zoom.us/j/87997326283?pwd=4QAhBuGiUpWw2yZW8wojluMoP1XpBk.1',
