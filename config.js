@@ -5,7 +5,7 @@
  */
 window.REVEAL_CONFIG={
   family:'inlaws', // 'inlaws' for in-laws, 'parents' for parents; URL can override with ?family=parents
-  revealDate:'2026-10-30T20:00:00-04:00', // 2026-10-31 10:00 KST / 2026-10-30 21:00 Philadelphia
+  revealDate:'2026-10-30T20:00:00-04:00', // 2026-10-31 09:00 KST / 2026-10-30 20:00 Philadelphia
   revealTimeZone:'Asia/Seoul',
   revealPassword:'America',
   zoomUrl:'https://us05web.zoom.us/j/87997326283?pwd=4QAhBuGiUpWw2yZW8wojluMoP1XpBk.1',
@@ -28,14 +28,14 @@ window.REVEAL_CONFIG={
     todayLabel:'같이 확인하실까요?',dateNotSet:'공개 날짜가 설정되지 않았어요',
     afterIndex:'',afterLabel:'',afterEyebrow:'',afterHeading:'실시간 영상 통화 혹은 페이지에서<br><em>소식을 확인해 주세요.</em>',
     afterCopy:'',
-    liveEyebrow:'',liveTitle:'실시간 영상 통화로 함께하기',liveDescription:'2026년 10월 31일 오전 10시',zoomButton:'줌 (Zoom)에서 함께하기 ↗',zoomMissing:'Zoom 주소가 아직 설정되지 않았어요.',
+    liveEyebrow:'',liveTitle:'실시간 영상 통화로 함께하기',liveDescription:'2026년 10월 31일 오전 9시',zoomButton:'줌 (Zoom)에서 함께하기 ↗',zoomMissing:'Zoom 주소가 아직 설정되지 않았어요.',
     privateEyebrow:'실시간 영상 통화를 놓치셨나요?',privateTitle:'페이지에서 소식 확인하기',privateDescription:'비밀번호를 입력해 소식을 확인하세요.',revealButton:'페이지 열기',pageMissing:'공개 페이지를 준비하고 있어요.',previewLink:'완료 화면 미리보기 ↗'
   },
   uiEnglish:{
     pageTitle:'Until Our Day',brand:'',headerNote:'',eyebrow:'D-DAY',countdownHeading:'Counting down to our special day',
     countdownUnits:{days:'days',hours:'hours',minutes:'minutes',seconds:'seconds'},dateSuffix:' KST',countdownHint:'The next page will appear automatically when the countdown ends.',dateNotSet:'The reveal date has not been set.',previewDateLabel:'Reveal day preview',
     todayLabel:'The day is here',afterIndex:'',afterLabel:'',afterEyebrow:'',afterHeading:'Join us by video call or check the page<br><em>for our news.</em>',afterCopy:'',
-    liveEyebrow:'',liveTitle:'Join us by video call',liveDescription:'Saturday, October 31, 2026 at 10:00 AM KST (Friday, October 30 at 9:00 PM ET)',zoomButton:'Join on Zoom ↗',zoomMissing:'The Zoom link has not been set yet.',
+    liveEyebrow:'',liveTitle:'Join us by video call',liveDescription:'Saturday, October 31, 2026 at 9:00 AM KST (Friday, October 30 at 8:00 PM ET)',zoomButton:'Join on Zoom ↗',zoomMissing:'The Zoom link has not been set yet.',
     privateEyebrow:'Did you miss the video call?',privateTitle:'Check the page for our news',privateDescription:'Enter the password to see our news.',revealButton:'Open the page',pageMissing:'The page is being prepared.',previewLink:'Preview the reveal page ↗',previewBanner:'Preview only · This page does not start the actual reveal or Zoom meeting',
     previewRevealLink:'← Preview the reveal page',previewCountdownLink:'← Back to the real countdown'
   },
