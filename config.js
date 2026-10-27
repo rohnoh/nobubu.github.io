@@ -9,7 +9,7 @@ window.REVEAL_CONFIG={
   revealTimeZone:'Asia/Seoul',
   revealPassword:'America',
   zoomUrl:'https://us05web.zoom.us/j/87997326283?pwd=4QAhBuGiUpWw2yZW8wojluMoP1XpBk.1',
-  babySex:'girl', // 'boy' or 'girl'; leave blank until ready
+  babySex:'boy', // 'boy' or 'girl'; leave blank until ready
   babyName:'',
   dueDate:'2027년 5월 첫째 주랍니다! (5월 3일 - 7일 예정)',
   photos:[
