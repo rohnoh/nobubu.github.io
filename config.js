@@ -5,7 +5,7 @@
  */
 window.REVEAL_CONFIG={
   family:'inlaws', // 'inlaws' for in-laws, 'parents' for parents; URL can override with ?family=parents
-  revealDate:'2026-10-26T21:00:00-04:00', // 2026-10-31 10:00 KST / 2026-10-30 21:00 Philadelphia
+  revealDate:'2026-10-26T21:11:00-04:00', // 2026-10-31 10:00 KST / 2026-10-30 21:00 Philadelphia
   revealTimeZone:'Asia/Seoul',
   revealPassword:'America',
   zoomUrl:'https://us05web.zoom.us/j/87997326283?pwd=4QAhBuGiUpWw2yZW8wojluMoP1XpBk.1',
@@ -13,9 +13,9 @@ window.REVEAL_CONFIG={
   babyName:'',
   dueDate:'2027년 5월 첫째 주랍니다! (5월 3일 - 7일 예정)',
   photos:[
-    {src:'images/IMG_7880.jpg',alt:'7~8주 차 초음파 사진',caption:'우리 아이의 소식을 처음 알게 된 날 (임신 7~8주 차)'},
-    {src:'images/IMG_8017.jpg',alt:'임신 12주 차 초음파 검사 사진',caption:'임신 12주 차, 드디어 첫 병원 검사를 받았어요. 아기가 잘 자라고 있대요!'},
-    {src:'images/IMG_7490.jpg',alt:'AI로 생성한 가족의 예상 모습',caption:'챗GPT로 생성해 본 우리 딸과 아들의 예상 모습이랍니다.'}
+    {src:'IMG_7880.jpg',alt:'7~8주 차 초음파 사진',caption:'우리 아이의 소식을 처음 알게 된 날 (임신 7~8주 차)'},
+    {src:'IMG_8017.jpg',alt:'임신 12주 차 초음파 검사 사진',caption:'임신 12주 차, 드디어 첫 병원 검사를 받았어요. 아기가 잘 자라고 있대요!'},
+    {src:'IMG_7490.jpg',alt:'AI로 생성한 가족의 예상 모습',caption:'챗GPT로 생성해 본 우리 딸과 아들의 예상 모습이랍니다.'}
   ],
   revealCopy:{
     inlaws:{title:'손자, 조카가 생긴 것을 축하드립니다!', message:''},
