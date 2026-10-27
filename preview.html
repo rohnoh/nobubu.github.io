@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f3ed"><meta name="robots" content="noindex,nofollow">
+ <meta name="description" content="카운트다운 종료 화면 미리보기"><title>공개일 화면 미리보기</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css">
+ <style>.preview-banner{position:fixed;z-index:30;top:13px;left:50%;transform:translateX(-50%);background:#fff8ef;border:1px solid #c27e6170;color:#795744;border-radius:24px;padding:9px 16px;font-size:11px;box-shadow:0 5px 25px #24262212;white-space:nowrap}.preview-link{display:inline-block;margin-top:22px;color:#e7cdbd;text-decoration:none;border-bottom:1px solid #e7cdbd70;padding-bottom:5px;font-size:11px}.preview-intro{margin:0 auto 24px;max-width:600px;color:#bec2ba;font-size:12px;line-height:1.9}</style>
+</head>
+<body class="landing-page preview-page">
+ <div class="preview-banner">미리보기 전용 · 실제 공개일/Zoom 동작에는 영향이 없습니다</div>
+ <div class="progress"><span id="progressBar"></span></div>
+ <header class="topbar"><a class="wordmark" id="brandName" href="index.html">우리의 약속</a><div class="header-tools"><span class="top-note" id="headerNote"></span><button class="language-toggle" id="languageToggle" type="button" aria-label="Switch to English">English</button></div></header>
+ <main id="top">
+  <section class="countdown-hero panel"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="countdown-copy reveal visible">
+   <p class="eyebrow" id="eyebrow">D-DAY</p><h1 id="countdownHeading">약속한 날까지</h1>
+   <div class="countdown" id="countdown"><strong class="today-label">오늘, 함께 만나요</strong></div><p class="reveal-date" id="revealDate"></p>
+  </div><div class="hero-stamp"><span>MADE<br>WITH LOVE</span><b>♡</b></div><div class="hero-bottom"><span>A DAY WE'LL REMEMBER</span><span>01 — 01</span></div></section>
+  <section class="after-date panel" id="afterDate"><div class="section-index"><span id="afterIndex">01</span><i></i><span id="afterLabel">오늘</span></div><div class="after-inner"><p class="eyebrow" id="afterEyebrow">THE DAY IS HERE</p><h2 id="afterHeading">이어서<br><em>확인해 주세요.</em></h2><p class="after-copy" id="afterCopy"></p>
+   <div class="live-card"><span class="live-dot"></span><p class="eyebrow" id="liveEyebrow"></p><h3 id="liveTitle">실시간 영상 통화로 함께하기</h3><p id="liveDescription"></p><a id="zoomLink" class="primary-link" href="#" target="_blank" rel="noopener">줌 (Zoom)에서 함께하기 ↗</a></div>
+   <div class="private-card"><p class="eyebrow" id="privateEyebrow">실시간 영상 통화를 놓치셨나요?</p><h3 id="privateTitle">페이지에서 소식 확인하기</h3><p id="privateDescription">비밀번호를 입력해 소식을 확인하세요.</p><a id="revealPageLink" class="primary-link" href="reveal.html">페이지 열기</a></div>
+   <a id="previewRevealLink" class="preview-link" href="reveal.html?preview=1">← 공개 페이지 미리보기</a><br><a class="preview-link" id="previewCountdownLink" href="index.html">← 실제 카운트다운으로 돌아가기</a>
+  </div></section>
+ </main><script src="config.js"></script><script src="script.js"></script><script>const fam=new URLSearchParams(location.search).get('family')==='parents'?'parents':'inlaws',lang=document.documentElement.lang==='en'?'en':'ko';document.getElementById('zoomLink').href=window.REVEAL_CONFIG.zoomUrl||'#';document.getElementById('revealPageLink').href='reveal.html?family='+fam+'&preview=1&lang='+lang;document.getElementById('previewRevealLink').href='reveal.html?family='+fam+'&preview=1&lang='+lang;</script>
+</body></html>
