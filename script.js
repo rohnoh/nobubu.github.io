@@ -5,7 +5,7 @@
  let language='ko';try{language=localStorage.getItem('family-reveal-language')==='en'?'en':'ko'}catch{}
  const words=()=>language==='en'?uiEn:ui;
  const value=key=>words()[key]??ui[key]??'';
- const dateDeadline=Date.parse(c.revealDate||'');
+ let dateDeadline=Date.parse(c.revealDate||'');
  const fallback={pageTitle:'우리의 약속',brand:'우리의 약속',eyebrow:'D-DAY',countdownHeading:'약속한 날까지',todayLabel:'오늘, 함께 만나요',dateNotSet:'공개 날짜가 설정되지 않았어요'};
  const fieldMap=[['brandName','brand'],['headerNote','headerNote'],['eyebrow','eyebrow'],['countdownHeading','countdownHeading'],['countdownHint','countdownHint'],['afterIndex','afterIndex'],['afterLabel','afterLabel'],['afterEyebrow','afterEyebrow'],['afterCopy','afterCopy'],['liveEyebrow','liveEyebrow'],['liveTitle','liveTitle'],['liveDescription','liveDescription'],['zoomMissing','zoomMissing'],['privateEyebrow','privateEyebrow'],['privateTitle','privateTitle'],['privateDescription','privateDescription'],['pageMissing','pageMissing']];
  const updateDate=()=>{
@@ -54,8 +54,11 @@
  if($('countdownHeading'))$('countdownHeading').style.fontSize=ui.countdownHeadingSize||'15px';if($('countdownHint'))$('countdownHint').style.fontSize=ui.countdownHintSize||'13px';if($('revealDate'))$('revealDate').style.color=ui.dateColor||'var(--muted)';
  let released=false;const after=$('afterDate');
  function openDay(){if(released)return;released=true;const first=$('countdownPage');if(first)first.hidden=true;after.hidden=false;$('countdown').innerHTML='<strong class="today-label">'+value('todayLabel')+'</strong>';if(c.zoomUrl){$('zoomLink').href=c.zoomUrl;$('zoomLink').hidden=false;$('zoomMissing').hidden=true}else set('zoomMissing',value('zoomMissing'));$('revealPageLink').href='reveal.html?family='+family+'&lang='+language;$('revealPageLink').hidden=false;$('pageMissing').hidden=true;$('previewLink').href='preview.html?family='+family+'&lang='+language;window.scrollTo(0,0)}
- function tick(){if(!Number.isFinite(dateDeadline)||released)return;const left=dateDeadline-Date.now();if(left<=0){openDay();return}const s=Math.floor(left/1000);set('days',String(Math.floor(s/86400)).padStart(2,'0'));set('hours',String(Math.floor(s%86400/3600)).padStart(2,'0'));set('minutes',String(Math.floor(s%3600/60)).padStart(2,'0'));set('seconds',String(s%60).padStart(2,'0'))}
- if(q.get('preview')==='1')openDay();else{tick();setInterval(tick,1000)}
+ function returnToCountdown(){released=false;if(after)after.hidden=true;const first=$('countdownPage');if(first)first.hidden=false;tick();window.scrollTo(0,0)}
+ function tick(){if(q.get('preview')==='1')return;const configuredDeadline=Date.parse(c.revealDate||'');if(configuredDeadline!==dateDeadline)dateDeadline=configuredDeadline;if(!Number.isFinite(dateDeadline))returnCountdownIfNeeded();else{const left=dateDeadline-Date.now();if(left<=0){openDay();return}if(released)returnCountdownIfNeeded();const s=Math.floor(left/1000);set('days',String(Math.floor(s/86400)).padStart(2,'0'));set('hours',String(Math.floor(s%86400/3600)).padStart(2,'0'));set('minutes',String(Math.floor(s%3600/60)).padStart(2,'0'));set('seconds',String(s%60).padStart(2,'0'))}}
+ function returnCountdownIfNeeded(){if(released)returnToCountdown()}
+ async function refreshConfiguredDate(){try{const response=await fetch('config.js?v='+Date.now(),{cache:'no-store'});if(!response.ok)return;const source=await response.text(),match=source.match(/revealDate\s*:\s*(['"])(.*?)\1/);if(match){const latest=Date.parse(match[2]);if(Number.isFinite(latest)&&latest!==dateDeadline){dateDeadline=latest;tick()}}}catch{}}
+ if(q.get('preview')==='1')openDay();else{tick();setInterval(tick,1000);setInterval(refreshConfiguredDate,15000)}
  const toggle=$('languageToggle');if(toggle)toggle.addEventListener('click',()=>applyLanguage(language==='ko'?'en':'ko'));
  applyLanguage(language);
  const bar=$('progressBar');addEventListener('scroll',()=>{if(bar)bar.style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100||0)+'%'},{passive:true});
