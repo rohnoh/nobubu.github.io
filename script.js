@@ -7,17 +7,23 @@
  const value=key=>words()[key]??ui[key]??'';
  let dateDeadline=Date.parse(c.revealDate||'');
  let dateVerified=location.protocol==='file:';
+ const revealPageDelayMs=Math.max(0,Number(c.revealPageDelayMinutes??30))*60*1000;
  const fallback={pageTitle:'우리의 약속',brand:'우리의 약속',eyebrow:'D-DAY',countdownHeading:'약속한 날까지',todayLabel:'오늘, 함께 만나요',dateNotSet:'공개 날짜가 설정되지 않았어요'};
  const fieldMap=[['brandName','brand'],['headerNote','headerNote'],['eyebrow','eyebrow'],['countdownHeading','countdownHeading'],['countdownHint','countdownHint'],['afterIndex','afterIndex'],['afterLabel','afterLabel'],['afterEyebrow','afterEyebrow'],['afterCopy','afterCopy'],['liveEyebrow','liveEyebrow'],['liveTitle','liveTitle'],['liveDescription','liveDescription'],['zoomMissing','zoomMissing'],['privateEyebrow','privateEyebrow'],['privateTitle','privateTitle'],['privateDescription','privateDescription'],['pageMissing','pageMissing']];
  const updateDate=()=>{
   if(!Number.isFinite(dateDeadline)){set('revealDate',value('dateNotSet')||fallback.dateNotSet);return}
   const date=new Date(dateDeadline);
+  const privateDate=new Date(dateDeadline+revealPageDelayMs);
   if(language==='en'){
    const kstDate=new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric',timeZone:'Asia/Seoul'}).format(date);
    const kstTime=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'Asia/Seoul'}).format(date);
    const etDate=new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric',timeZone:'America/New_York'}).format(date);
    const etTime=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}).format(date);
    set('revealDate',`${kstDate} · ${kstTime} (Korea time)<br>${etDate} · ${etTime} (Philadelphia time)`,true);
+   const availableDate=new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric',timeZone:'Asia/Seoul'}).format(privateDate);
+   const availableTime=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'Asia/Seoul'}).format(privateDate);
+   set('liveDescription',`${kstDate} · ${kstTime} (Korea time)`);
+   set('privateAvailableAt',`Available from ${availableDate} at ${availableTime} KST.`);
   }else{
    const dateOptions={year:'numeric',month:'long',day:'numeric',weekday:'long'};
    const kstDate=new Intl.DateTimeFormat('ko-KR',{...dateOptions,timeZone:'Asia/Seoul'}).format(date);
@@ -25,6 +31,10 @@
    const phillyDate=new Intl.DateTimeFormat('ko-KR',{...dateOptions,timeZone:'America/New_York'}).format(date);
    const phillyTime=new Intl.DateTimeFormat('ko-KR',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}).format(date);
    set('revealDate',`${kstDate} · ${kstTime} (한국시간)<br>${phillyDate} · ${phillyTime} (필라델피아시간)`+(ui.dateSuffix??''),true);
+   const timeParts=new Intl.DateTimeFormat('ko-KR',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Seoul'}).formatToParts(privateDate);
+   const part=name=>timeParts.find(item=>item.type===name)?.value||'';
+   set('liveDescription',`${kstDate} · ${kstTime} (한국시간)`);
+   set('privateAvailableAt',`${new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long',timeZone:'Asia/Seoul'}).format(privateDate)} ${part('dayPeriod')} ${part('hour')}시 ${part('minute')}분에 열람 가능합니다.`);
   }
  };
  function applyLanguage(next){
@@ -56,7 +66,8 @@
  let released=false;const after=$('afterDate');
  function showRefreshHelp(){let note=$('refreshHelp');if(!note){note=document.createElement('aside');note.id='refreshHelp';note.setAttribute('role','status');note.style.cssText='margin:0 auto 18px;padding:16px 18px;max-width:620px;background:#fffaf4;border:1px solid #dfbda8;border-radius:14px;color:#493a32;font:500 15px/1.6 sans-serif;text-align:center;box-shadow:0 8px 24px #493a3210';note.innerHTML='최신 공개 날짜를 이 로컬 페이지에서 확인할 수 없어요.<br>게시된 사이트를 열어 최신 카운트다운을 확인해 주세요.<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px"><a href="https://rohnoh.github.io/nobubu.github.io/" style="display:inline-block;padding:9px 15px;border-radius:24px;background:#c99577;color:white;text-decoration:none">게시된 사이트 열기</a><button id="refreshCurrentPage" type="button" style="padding:8px 14px;border:1px solid #c99577;border-radius:24px;background:white;color:#493a32;font:inherit">이 페이지 새로고침</button></div>';const host=$('countdownPage')?.querySelector('.countdown-copy');if(host)host.prepend(note);else document.body.prepend(note);note.querySelector('#refreshCurrentPage').addEventListener('click',()=>location.reload())}}
  function hideRefreshHelp(){const note=$('refreshHelp');if(note)note.remove()}
- function openDay(){if(released)return;released=true;const first=$('countdownPage');if(first)first.hidden=true;after.hidden=false;$('countdown').innerHTML='<strong class="today-label">'+value('todayLabel')+'</strong>';if(c.zoomUrl){$('zoomLink').href=c.zoomUrl;$('zoomLink').hidden=false;$('zoomMissing').hidden=true}else set('zoomMissing',value('zoomMissing'));$('revealPageLink').href='reveal.html?family='+family+'&lang='+language;$('revealPageLink').hidden=false;$('pageMissing').hidden=true;$('previewLink').href='preview.html?family='+family+'&lang='+language;window.scrollTo(0,0)}
+ function updateRevealPageAvailability(){if(!released)return;const ready=Date.now()>=dateDeadline+revealPageDelayMs,link=$('revealPageLink'),pending=$('pageUnavailable'),description=$('privateDescription'),availableAt=$('privateAvailableAt');if(link)link.hidden=!ready;if(availableAt)availableAt.hidden=Date.now()>=dateDeadline;if(pending){pending.hidden=ready;pending.textContent=value('privatePending')||'공개 시간이 되면 페이지 버튼이 표시됩니다.'}if(description)description.hidden=!ready}
+ function openDay(){if(released){updateRevealPageAvailability();return}released=true;const first=$('countdownPage');if(first)first.hidden=true;after.hidden=false;$('countdown').innerHTML='<strong class="today-label">'+value('todayLabel')+'</strong>';if(c.zoomUrl){$('zoomLink').href=c.zoomUrl;$('zoomLink').hidden=false;$('zoomMissing').hidden=true}else set('zoomMissing',value('zoomMissing'));$('revealPageLink').href='reveal.html?family='+family+'&lang='+language;$('pageMissing').hidden=true;$('previewLink').href='preview.html?family='+family+'&lang='+language;updateRevealPageAvailability();window.scrollTo(0,0)}
  function resetToCountdown(){released=false;if(after)after.hidden=true;const first=$('countdownPage');if(first)first.hidden=false;const countdown=$('countdown');if(countdown)countdown.innerHTML='<div><strong id="days">--</strong><span id="daysUnit">일</span></div><i>:</i><div><strong id="hours">--</strong><span id="hoursUnit">시간</span></div><i>:</i><div><strong id="minutes">--</strong><span id="minutesUnit">분</span></div><i>:</i><div><strong id="seconds">--</strong><span id="secondsUnit">초</span></div>';applyLanguage(language);tick();window.scrollTo(0,0)}
  function tick(){if(q.get('preview')==='1'||!dateVerified)return;if(!Number.isFinite(dateDeadline)){returnCountdownIfNeeded();return}const left=dateDeadline-Date.now();if(left<=0){openDay();return}if(released)returnCountdownIfNeeded();const s=Math.floor(left/1000);set('days',String(Math.floor(s/86400)).padStart(2,'0'));set('hours',String(Math.floor(s%86400/3600)).padStart(2,'0'));set('minutes',String(Math.floor(s%3600/60)).padStart(2,'0'));set('seconds',String(s%60).padStart(2,'0'))}
  function returnCountdownIfNeeded(){if(released)resetToCountdown()}
